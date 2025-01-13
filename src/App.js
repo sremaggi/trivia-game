@@ -4,12 +4,12 @@ import Question from "./components/Question";
 import LoadingSpinner from "./components/LoadingSpinner";
 
 const App = () => {
-
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [question, setQuestion] = useState(null);
   const [loading, setLoading] = useState(false);
   const [score, setScore] = useState(0);
+  const [lives, setLives] = useState(3); // Agrega estado para vidas
   const [gameOver, setGameOver] = useState(false);
 
   // Fetch categories when the component mounts
@@ -47,6 +47,7 @@ const App = () => {
   const handleCategorySelect = (categoryId) => {
     setSelectedCategory(categoryId);
     setScore(0);
+    setLives(3); // Restablece vidas
     setGameOver(false);
     fetchQuestion(categoryId);
   };
@@ -57,7 +58,10 @@ const App = () => {
       setScore(score + 1);
       fetchQuestion(selectedCategory); // Load next question
     } else {
-      setGameOver(true); // End game
+      setLives(lives - 1); // Resta una vida
+      if (lives - 1 === 0) {
+        setGameOver(true); // Fin del juego
+      }
     }
   };
 
@@ -67,11 +71,22 @@ const App = () => {
     setQuestion(null);
     setGameOver(false);
     setScore(0);
+    setLives(3); // Reinicia vidas
   };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-4 flex flex-col items-center justify-center">
-      <h1 className="text-3xl font-medium text-center mb-2">Trivia Game</h1>
+      <h1 className="text-5xl font-medium text-center mb-2">Trivia Game</h1>
+
+      {/* Mostrando corazones para representar vidas */}
+      <div className="flex space-x-2 mb-4 text-2xl">
+        {Array.from({ length: 3 }).map((_, index) => (
+          <span key={index} className={`${index < lives ? "text-red-600" : "text-gray-700"}`}>
+            {index < lives ? "❤️" : "🖤"}
+          </span>
+        ))}
+      </div>
+
 
       {!selectedCategory && !gameOver && (
         <Categories
