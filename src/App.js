@@ -10,6 +10,7 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [score, setScore] = useState(0);
   const [lives, setLives] = useState(3); // Agrega estado para vidas
+
   const [gameOver, setGameOver] = useState(false);
 
   // Fetch categories when the component mounts
@@ -35,6 +36,7 @@ const App = () => {
         `https://opentdb.com/api.php?amount=1&category=${categoryId}&type=multiple`
       );
       const data = await response.json();
+      console.log("DATA: ", data)
       setQuestion(data.results[0]);
     } catch (error) {
       console.error("Error fetching question:", error);
@@ -78,14 +80,6 @@ const App = () => {
     <div className="min-h-screen bg-gray-900 text-white p-4 flex flex-col items-center justify-center">
       <h1 className="text-5xl font-medium text-center mb-2">Trivia Game</h1>
 
-      {/* Mostrando corazones para representar vidas */}
-      <div className="flex space-x-2 mb-4 text-2xl">
-        {Array.from({ length: 3 }).map((_, index) => (
-          <span key={index} className={`${index < lives ? "text-red-600" : "text-gray-700"}`}>
-            {index < lives ? "❤️" : "🖤"}
-          </span>
-        ))}
-      </div>
 
 
       {!selectedCategory && !gameOver && (
@@ -100,6 +94,7 @@ const App = () => {
           question={question}
           onAnswer={handleAnswer}
           score={score}
+          lives={lives}
         />
       )}
 
