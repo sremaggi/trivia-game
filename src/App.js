@@ -2,14 +2,16 @@ import React, { useEffect, useState } from "react";
 import Categories from "./components/Categories";
 import Question from "./components/Question";
 import LoadingSpinner from "./components/LoadingSpinner";
+import { TitlePage } from "./components/Title";
 
 const App = () => {
+
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [question, setQuestion] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [score, setScore] = useState(0);
-  const [lives, setLives] = useState(3); // Agrega estado para vidas
+  const [lives, setLives] = useState(3);
 
   const [gameOver, setGameOver] = useState(false);
 
@@ -20,6 +22,7 @@ const App = () => {
         const response = await fetch("https://opentdb.com/api_category.php");
         const data = await response.json();
         setCategories(data.trivia_categories || []);
+        setLoading(false)
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
@@ -49,7 +52,7 @@ const App = () => {
   const handleCategorySelect = (categoryId) => {
     setSelectedCategory(categoryId);
     setScore(0);
-    setLives(3); // Restablece vidas
+    setLives(3);
     setGameOver(false);
     fetchQuestion(categoryId);
   };
@@ -60,9 +63,9 @@ const App = () => {
       setScore(score + 1);
       fetchQuestion(selectedCategory); // Load next question
     } else {
-      setLives(lives - 1); // Resta una vida
+      setLives(lives - 1); // Live less
       if (lives - 1 === 0) {
-        setGameOver(true); // Fin del juego
+        setGameOver(true); // End game
       }
     }
   };
@@ -73,15 +76,12 @@ const App = () => {
     setQuestion(null);
     setGameOver(false);
     setScore(0);
-    setLives(3); // Reinicia vidas
+    setLives(3);
   };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-4 flex flex-col items-center justify-center">
-      <h1 className="text-5xl font-medium text-center mb-2">Trivia Game</h1>
-
-
-
+      <TitlePage />
       {!selectedCategory && !gameOver && (
         <Categories
           categories={categories}
@@ -95,6 +95,7 @@ const App = () => {
           onAnswer={handleAnswer}
           score={score}
           lives={lives}
+          setGameOver={setGameOver}
         />
       )}
 

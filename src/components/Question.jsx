@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { decodeHtmlEntities } from "../utils/decodeHtml";
 
-const Question = ({ question, onAnswer, score, lives }) => {
+const Question = ({ question, onAnswer, score, lives, setGameOver }) => {
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [isAnswered, setIsAnswered] = useState(false);
     const [shuffledAnswers, setShuffledAnswers] = useState([]);
@@ -69,6 +69,10 @@ const Question = ({ question, onAnswer, score, lives }) => {
                 </div>
 
             </div>
+            {/* <div className="flex justify-center w-20 items-center text-center cursor-pointer bg-red-900/30 hover:bg-red-500 rounded-xl p-2">
+                <a className="flex justify-center" onClick={() => { setGameOver(true) }}>Exit</a>
+            </div> */}
+
 
         </div>
     );
